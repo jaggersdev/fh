@@ -1,0 +1,657 @@
+<html>
+
+<!--Version 41-->
+
+<head>
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <style>
+
+        body,table,td,tr{margin: 0; padding: 0;}
+
+        #form_box {
+            padding: 20px;
+            background-color: #dadada;
+            width: 500px;
+            position: relative;
+            float: left;
+            margin-right: 20px;
+        }
+
+        #outgoing {
+            border: 1px solid #A6192E;
+            padding: 20px;
+            position: relative;
+            top: -37px;
+            float: left;
+            width: 550px;
+
+        }
+
+        #reply {
+            border: 1px solid #A6192E;
+            padding: 20px;
+            position: relative;
+            float: left;
+            top: -20px;
+            width: 550px;
+        }
+
+        .linkContainer {
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .makeMy, .addBtn, .removeBtn, .copyBtn {
+            margin-right: 1rem;
+            cursor: pointer;
+            padding: 0.2rem 0.6rem;
+            background-color: #f7f7f7;
+            border-radius: 0.2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="form_box">
+        <p><strong>Signature Block Generator</strong></p>
+        <form name="sigForm"> First and Last Name: <input size="40" type="text" name="flname"
+                id="firstlast"><br /><br /> Title: <input size="40" type="text" name="title" id="title"><br /><br />
+            Office #:<input maxlength="12" name="office" type="text" id="office" class="phoneNumber"> Ext#:<input
+                maxlength="10" size="7" name="extension" type="text" id="extension" class="extensionNumber"> <br /><!--<span
+                style="color: #003ea2;">Optional if you work from home. Use direct # if you have one,
+                otherwise use main line # + extension #.</span>--><br />Cell#: <input maxlength="12" name="mobile"
+                type="text" id="mobile" class="phoneNumber"><span style="font-style: italic;color: #646464;">
+                optional</span><br /><br /> Fax #: <input maxlength="12" name="fax" type="text" id="fax"
+                class="phoneNumber"><span style="font-style: italic;color: #646464;"> optional</span><br /><br /><hr>
+                <span
+                style="color: #003ea2;">Choose an address from the dropdown that is closest to you. If no location is nearby, use Hurst HQ. Home addresses and P.O. boxes are not allowed.    
+                </span>
+                Address: <select id="address" class="address">
+                <option>Select Your Location</option>
+                <option>1020 Pittsburgh Dr., Suite A | Delaware, OH 43015</option>
+                <option>15534 West Hardy Road, Suite 155 | Houston, TX 77060</option>
+                <option>1845 Precinct Line Road, Suite 100 | Hurst, TX  76054</option>
+                <option>1500 North Bolton Street | Jacksonville, TX 75766</option>
+                <option>825 College Blvd., Ste 102, PMB 630 | Oceanside, CA 92057</option>
+                <option>1840 Oakdale Avenue | Racine, WI 53406</option>
+                <option>1234 San Francisco | San Antonio, TX 78201</option>
+                <option>7501 South Quincy Street, Suite #175 | Willowbrook, IL 60527</option>
+                </select> <br/>   
+
+            <div class="linksContainer">
+                <hr></hr>
+                <span style="color: #003ea2;">Optional links for Sales, Marketing, and IT. See insructions for more info.</span><br/>
+                <div class="linkContainer">
+                    <div class="urlContainer">
+                        <label for="urlInput">URL</label>
+                        <input type="text" name="urlInput" id="urlInput" class="urlInput">
+                    </div>
+                    <div class="linkTextContainer">
+                        <label for="linkTextInput">Link Text</label>
+                        <input type="text" name="linkTextInput" id="linkTextInput" class="linkTextInput">
+                    </div>
+                    <div class="addBtn" onclick="addNewRow(this)">+</div>
+                    <div class="removeBtn" onclick="deleteRow(this)">-</div>
+                </div>
+                <hr></hr>
+            </div>
+
+
+            <br /> <br /><button class="makeMy" type="button" onclick="getOption();" value="Make My Signature">Make
+                My Signature</button>
+        </form>
+        <div><button class="copyBtn" onclick="copyHtmlToClipboard('#outgoing')">Copy Outgoing Signature</button></div><br/>
+        <div><button class="copyBtn" onclick="copyHtmlToClipboard('#reply')">Copy Reply Signature</button></div>
+    </div> <br /> <br />
+
+
+
+
+
+
+<!--OUTGOING EMAIL-->
+
+    <div id="outgoing">
+        
+
+
+
+
+
+       <!-------------------FIRST LAST NAME AND TITLE------------------->     
+
+
+<table>
+
+<tr>
+<td>    
+            <span class="display_firstlast" style="color: #00205B; font-weight: bold; font-size: 10.5pt;font-family: Arial, sans-serif;"></span>
+            <span style="color: #00205B; font-weight: bold; font-size: 10.5pt;font-family: Arial, sans-serif;">|</span>
+            <span class="display_title" style="color: #00205B; font-weight: bold; font-size: 10.5pt;font-family: Arial, sans-serif;"></span>
+            
+</td>
+</tr>
+       <!-------------------END FIRST LAST NAME AND TITLE------------------->     
+
+
+
+        <!-------------------PHONE NUMBERS------------------->
+<tr>
+<td>          
+        <!--OFFICE--> 
+        <span style="text-decoration: none; color: #00205B; font-size: 9pt; font-family: Arial, sans-serif;" id="officeo">o:</span>
+           
+        <!--OFFICE PHONE AND EXTENSION-->
+        <span class="display_office" style="text-decoration: none; color: #00205B; font-size: 9pt; font-family: Arial, sans-serif;"></span> 
+        <span id="extword" style="text-decoration: none; color: #00205B; font-size: 9pt; font-family: Arial, sans-serif;">ext.</span>
+        <span class="display_extension" style="text-decoration: none; color: #00205B; font-size: 9pt; font-family: Arial, sans-serif;"></span>
+
+        <!--MOBILE BOX-->
+
+        <!--PIPE #4--> <span id="pipe1" style="text-decoration: none; color: #00205B; font-size: 9pt; font-family: Arial, sans-serif;">|</span>
+        <!--CELL PHONE--> 
+
+        <span id="cell1" style="text-decoration: none; color: #00205B; font-size: 9pt; font-family: Arial, sans-serif;">c:</span>
+        <!--MOBILE--> 
+
+        <span class="display_mobile" style="text-decoration: none; color: #00205B; font-size: 9pt; font-family: Arial, sans-serif;"></span>
+        <span id="pipe2" style="text-decoration: none; color: #00205B; font-size: 9pt; font-family: Arial, sans-serif;">|</span>
+        <span id="faxy" style="text-decoration: none; color: #00205B; font-size: 9pt; font-family: Arial, sans-serif;">f:</span>
+        <span class="display_fax" style="text-decoration: none; color: #00205B; font-size: 9pt; font-family: Arial, sans-serif;"></span>
+        </p>
+</td>
+</tr>
+        <!-------------------END PHONE NUMBERS------------------->
+
+
+
+
+
+
+
+
+        <!-------------------LOGO------------------->
+<tr>
+        <td>          
+        <a style="border:none;" href="http://www.federalheath.com"><img width="200" style="display: block; width: 200px; max-width: 200px;" src="https://federalheath.com/fhlogos/fhlogo52.png" alt="Federal Heath"></a>
+</td>
+</tr>
+        <!-------------------END LOGO------------------->
+
+
+
+
+
+
+      
+
+
+
+        <!-------------------BRINGING YOUR BRAND TO LIFE TEXT------------------->
+<tr>
+<td height="20" style="padding-top: 3px;">     
+        <span style="line-height:1.5; padding: 0 0 5px 0; text-decoration: none; color: #00205B; font-size: 9.5pt; font-weight: bold; font-family: Arial, sans-serif;">Bringing Your Brand to Life<sup>&#174;</sup> Since 1901</span>
+</td>
+</tr>           
+        <!-------------------BRINGING YOUR BRAND TO LIFE TEXT------------------->
+
+
+
+
+
+
+
+
+        <!-------------------ADDRESS------------------->
+<tr>
+<td height="15" style="padding-top: 3px;">      
+        <span class="display_address" style="line-height:1.5; padding: 0; color: #646464;font-size: 8pt;font-family: Arial, sans-serif;"></span>
+</tr>
+</td>    
+        <!-------------------ADDRESS------------------->
+
+
+
+
+
+
+        <!--------------WEBSITE IS A PERMANENT, STATIC LINK-------------->
+<tr>
+<td height="15" style="padding-top: 3px;">  
+              <span style="line-height:1.5; padding: 0; font-size: 8pt;font-family: Arial, sans-serif;"><a style="text-decoration: underline;color: #68101d;" href="http://www.federalheath.com">Website</a></span>
+              <span class="display_links" style="width: 424px;"></span>
+</tr>       
+</td>  
+        <!--------------WEBSITE IS A PERMANENT, STATIC LINK-------------->    
+
+        
+
+</table>
+
+</div> 
+
+    
+
+    <br /><br />
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--!-REPLY SECTION-!-->
+    <div id="reply">
+
+<table>
+<tr>
+<td>
+        <!--NAME AND TITLE--> 
+            <span class="display_firstlast" style="color: #00205B; font-weight: bold; font-size: 9pt;font-family: Arial, sans-serif;"></span>
+            <span style="color: #00205B; font-weight: bold; font-size: 9pt;font-family: Arial, sans-serif;">|</span>
+            <span class="display_title" style="color: #00205B; font-weight: bold; font-size: 9pt;font-family: Arial, sans-serif;"></span>
+    
+</td>
+</tr>
+
+
+<tr>
+<td>
+        <!--OFFICE--> 
+        <span style="text-decoration: none; color: #00205B; font-size: 9pt; font-family: Arial, sans-serif;" id="officeo2">o:</span>
+        <!--OFFICE PHONE AND EXTENSION--> 
+        <span class="display_office" style="text-decoration: none; color: #00205B; font-size: 9pt; font-family: Arial, sans-serif;"></span>
+        <span id="extword2" style="text-decoration: none; color: #00205B; font-size: 9pt; font-family: Arial, sans-serif;">ext.</span>
+        <span class="display_extension" style="text-decoration: none; color: #00205B; font-size: 9pt; font-family: Arial, sans-serif;"></span>
+        <!--PIPE #4--> <span id="pipe4" style="text-decoration: none; color: #00205B; font-size: 9pt; font-family: Arial, sans-serif;">|</span>
+        <!--C FOR CELL PHONE--> 
+        <span id="cell2" style="text-decoration: none; color: #00205B; font-size: 9pt; font-family: Arial, sans-serif;">c:</span>
+        <!--MOBILE--> 
+        <span class="display_mobile" style="text-decoration: none; color: #00205B; font-size: 9pt; font-family: Arial, sans-serif;"></span>
+        <span id="pipe5" style="text-decoration: none; color: #00205B; font-size: 9pt; font-family: Arial, sans-serif;">|</span>
+        <span id="faxy2" style="text-decoration: none; color: #00205B; font-size: 9pt; font-family: Arial, sans-serif;">f:</span>
+        <span class="display_fax" style="text-decoration: none; color: #00205B; font-size: 9pt; font-family: Arial, sans-serif;"></span>
+</td>
+</tr>
+      
+
+<tr>
+<td>
+    <span class="display_address" id="address" style="color: #00205B;font-size: 9pt;font-family: Arial, sans-serif; padding-top: 2px;"></span>
+    <span style="text-decoration: none; color: #00205B; font-size: 9pt; font-family: Arial, sans-serif;">|</span>
+    <a style="text-decoration: underline; color: #00205B;font-size: 9pt;font-family: Arial, sans-serif; padding-top: 2px;" target="_blank" href="http://www.federalheath.com">Federal Heath</a>
+</td>
+</tr>
+           
+
+</table>
+
+
+
+
+
+    </div>
+
+    <br /><br />
+    <script>
+        //first and last name validation
+
+function validateForm() {
+    var x = document.forms["sigForm"]["flname"].value;
+    if (x == "") {
+        alert("First & Last Name - Must be Filled Out!");
+        return false;
+    }
+
+    //title validation
+    var x = document.forms["sigForm"]["title"].value;
+    if (x == "") {
+        alert("Title - Must be Filled Out!");
+        return false;
+    }
+
+    //office phone # validation
+    var officePhoneInput = document.forms["sigForm"]["office"];
+    var x = officePhoneInput.value;
+    var mobileInput = document.forms["sigForm"]["mobile"];
+    var mobileNumber = mobileInput.value;
+    if (x == "" && mobileNumber == "") {
+        alert("You must enter an office phone or cell phone number!");
+        return false;
+    } else if (officePhoneInput.getAttribute('data-valid') == 'false') {
+        alert("Office Phone # - Wrong Format!");
+        return false;
+    }
+
+    //mobile phone # validation    
+    if (mobileNumber !== "" && mobileInput.getAttribute('data-valid') == 'false') {
+        alert("Mobile # - Wrong Format!");
+        return false;
+    }
+
+    //fax phone # validation
+    var faxInput = document.forms["sigForm"]["fax"];
+    var faxNumber = faxInput.value;
+    if (faxNumber !== "" && faxInput.getAttribute('data-valid') == 'false') {
+        alert("Fax # - Wrong Format!");
+        return false;
+    }
+
+    //office phone check + disappear!
+
+    if (document.forms["sigForm"]["office"].value == "") {
+        if ((re = 1)) {
+            $("#officeo").remove();
+            $("#pipe1").remove();
+            $("#officeo2").remove();
+            $("#pipe4").remove();
+            re = 0;
+        }
+    }
+
+    //mobile phone check + disappear!
+
+    if (document.forms["sigForm"]["mobile"].value == "") {
+        if ((re = 1)) {
+            $("#pipe1").remove();
+            $("#cell1").remove();
+            $("#pipe4").remove();
+            $("#cell2").remove();
+            re = 0;
+        }
+    }
+
+    //fax check + disappear!
+
+    if (document.forms["sigForm"]["fax"].value == "") {
+        if ((re = 1)) {
+            $("#pipe2").remove();
+            $("#faxy").remove();
+            $("#pipe5").remove();
+            $("#faxy2").remove();
+            re = 0;
+        }
+    }
+
+    //extension check + disappear!
+
+    if (document.forms["sigForm"]["extension"].value == "") {
+        if ((re = 1)) {
+            $("#extword").remove();
+            re = 0;
+        }
+    }
+
+    //extension check + disappear!
+
+    if (document.forms["sigForm"]["extension"].value == "") {
+        if ((re = 1)) {
+            $("#extword2").remove();
+            re = 0;
+        }
+    }
+
+    //end bracket function
+}
+
+//
+function getOption() {
+    if (validateForm() === false) {
+        return;
+    }
+    //first and last name
+    var firstlast = document.getElementById("firstlast").value;
+    var list = [].slice.call(document.getElementsByClassName("display_firstlast"));
+    list.forEach(function (item) {
+        item.innerHTML = firstlast;
+    });
+
+    //title
+    var title = document.getElementById("title").value;
+    var list = [].slice.call(document.getElementsByClassName("display_title"));
+    list.forEach(function (item) {
+        item.innerHTML = title;
+    });
+
+    //office
+    var office = document.getElementById("office").value;
+    var list = [].slice.call(document.getElementsByClassName("display_office"));
+    list.forEach(function (item) {
+        item.innerHTML = office;
+    });
+
+    //mobile
+    var mobile = document.getElementById("mobile").value;
+    var list = [].slice.call(document.getElementsByClassName("display_mobile"));
+    list.forEach(function (item) {
+        item.innerHTML = mobile;
+    });
+
+    //fax
+    var fax = document.getElementById("fax").value;
+    var list = [].slice.call(document.getElementsByClassName("display_fax"));
+    list.forEach(function (item) {
+        item.innerHTML = fax;
+    });
+
+    //extension
+    var extension = document.getElementById("extension").value;
+    var list = [].slice.call(document.getElementsByClassName("display_extension"));
+    list.forEach(function (item) {
+        item.innerHTML = extension;
+    });
+
+
+    //addresses dropdown
+
+    var address = document.getElementById("address").value;
+    var list = document.getElementsByClassName("display_address");
+    var i;
+    for (i = 0; i < list.length; i++) {
+        list[i].innerHTML = address;
+    }
+
+    // custom links section
+
+    let linksDisplayContainer = document.querySelector(".display_links");
+    let allLinks = document.querySelectorAll(".urlInput");
+    linksDisplayContainer.innerHTML = "";/*
+    linksDisplayContainer.innerHTML = `<span style="color: #00205B;font-size: 8pt;font-family: Arial, sans-serif;">
+    <a style="color: #A6192E;" href="www.federalheath.com">Website</a>
+</span>`;*/
+    allLinks.forEach((link)=>{
+        let linkValue = link.value;
+        let linkTextValue = link.parentElement.nextElementSibling.children[1].value;
+        if (linkValue !== "" && linkTextValue !== "") {
+            console.log(linkValue)
+            console.log(linkTextValue)
+            let lineSpan1 = document.createElement("span");
+            let lineSpan2 = document.createElement("span");
+            lineSpan1.setAttribute("style","color: #00205B;font-size: 8pt;font-family: Arial, sans-serif;text-decoration: none;");
+            lineSpan2.setAttribute("style","color: #00205B;font-size: 8pt;font-family: Arial, sans-serif;text-decoration: none;");
+            lineSpan1.innerHTML = ` | `;
+            let linkText = document.createElement("a");
+            linkText.href = `${linkValue}`;
+            linkText.innerHTML = `${linkTextValue}`;
+            linkText.setAttribute("style","color: #68101d;text-decoration: underline;");
+            lineSpan2.append(linkText);
+            linksDisplayContainer.append(lineSpan1);
+            linksDisplayContainer.append(lineSpan2);
+        }
+    })
+
+}
+
+(function phoneValidator() {
+    var filter = [];
+
+    //since we're looking for phone numbers, we need
+    //to allow digits 0 - 9 (they can come from either
+    //the numeric keys or the numpad)
+    const keypadZero = 48;
+    const numpadZero = 96;
+
+    //add key codes for digits 0 - 9 into this filter
+    for (var i = 0; i <= 9; i++) {
+        filter.push(i + keypadZero);
+        filter.push(i + numpadZero);
+    }
+
+    //add other keys that might be needed for navigation
+    //or for editing the keyboard input
+    filter.push(8);     //backspace
+    filter.push(9);     //tab
+    filter.push(46);    //delete
+    filter.push(37);    //left arrow
+    filter.push(39);    //right arrow
+
+    /*******************************************************
+      * replaceAll
+      * returns a string where all occurrences of a
+      * string 'search' are replaced with another 
+      * string 'replace' in a string 'src'
+    *******************************************************/
+    function replaceAll(src, search, replace) {
+        return src.split(search).join(replace);
+    }
+
+    /*******************************************************
+      * formatPhoneText
+      * returns a string that is in XXX-XXX-XXXX format
+    *******************************************************/
+    function formatPhoneText(value) {
+        value = replaceAll(value.trim(), ".", "");
+
+        if (value.length > 3 && value.length <= 6)
+            value = value.slice(0, 3) + "." + value.slice(3);
+        else if (value.length > 6)
+            value = value.slice(0, 3) + "." + value.slice(3, 6) + "." + value.slice(6);
+
+        return value;
+    }
+
+    /*******************************************************
+      * validatePhone
+      * return true if the string 'p' is a valid phone
+    *******************************************************/
+    function validatePhone(p) {
+        var phoneRe = /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
+        var digits = p.replace(/\D/g, "");
+        return phoneRe.test(digits);
+    }
+
+    /*******************************************************
+      * onKeyDown(e)
+      * when a key is pressed down, check if it is allowed
+      * or not. If not allowed, prevent the key event
+      * from propagating further
+    *******************************************************/
+    function onKeyDown(e) {
+        if (filter.indexOf(e.keyCode) < 0) {
+            e.preventDefault();
+            return false;
+        }
+    }
+
+    /*******************************************************
+      * onKeyUp(e)
+      * when a key is pressed up, grab the contents in that
+      * input field, format them in line with XXX-XXX-XXXX
+      * format and validate if the text is infact a complete
+      * phone number. Adjust the border color based on the
+      * result of that validation
+    *******************************************************/
+    function onKeyUp(e) {
+        var input = e.target;
+        var formatted = formatPhoneText(input.value);
+        var isValid = (validatePhone(formatted) || formatted.length == 0);
+        var color = (isValid) ? "gray" : "red";
+        var borderWidth = (isValid) ? "1px" : "3px";
+        input.style.borderColor = color;
+        input.style.borderWidth = borderWidth;
+        input.value = formatted;
+        if (!isValid) {
+            input.setAttribute('data-valid', false);
+        } else {
+            input.setAttribute('data-valid', true);
+        }
+    }
+
+    /*******************************************************
+      * setupPhoneFields
+      * Now let's rig up all the fields with the specified
+      * 'className' to work like phone number input fields
+    *******************************************************/
+    function setupPhoneFields(className) {
+        var lstPhoneFields = document.getElementsByClassName(className);
+
+        for (var i = 0; i < lstPhoneFields.length; i++) {
+            var input = lstPhoneFields[i];
+            if (input.type.toLowerCase() == "text") {
+                input.placeholder = "XXX.XXX.XXXX";
+                input.addEventListener("keydown", onKeyDown);
+                input.addEventListener("keyup", onKeyUp);
+            }
+        }
+    }
+
+    //MAIN
+    setupPhoneFields("phoneNumber");
+})();
+
+let linksContainer = document.querySelector(".linksContainer");
+
+function addNewRow(btn) {
+    let newElementHtml = btn.parentElement.innerHTML;
+    let newElement = document.createElement("div");
+    newElement.classList.add("linkContainer");
+    newElement.innerHTML = newElementHtml;
+    linksContainer.append(newElement);
+}
+
+function deleteRow(btn) {
+    btn.parentElement.remove();
+}
+    </script>
+
+<script>
+    function copyHtmlToClipboard(elementId) {
+        var element = document.querySelector(elementId);  // Find the element
+        var range = document.createRange();               // Create a Range (a range is a like the selection but invisible)
+        range.selectNodeContents(element);                // Select the entire contents of the element with the range
+        var selection = window.getSelection();            // Get the selection object (allows you to change selection)
+        selection.removeAllRanges();                      // Remove any selections already made
+        selection.addRange(range);                        // Make the range you have just created the visible selection
+        document.execCommand('copy');                     // Copy the selection to the clipboard
+        selection.removeAllRanges();                      // Remove the selection
+        alert("Signature HTML copied to clipboard!");     // Optional: alert to confirm copy
+    }
+</script>
+</body>
+
+</html>
+
+
+
+
+
+
+ 
+
+    
+
+
+        
+    
+
+      
