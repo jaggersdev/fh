@@ -481,7 +481,12 @@ function getOption() {
             lineSpan2.setAttribute("style","color: #00205B;font-size: 8pt;font-family: Arial, sans-serif;text-decoration: none;");
             lineSpan1.innerHTML = ` | `;
             let linkText = document.createElement("a");
-            linkText.href = `${linkValue}`;
+
+            // Ensure the link starts with http:// or https://
+            let formattedLink = linkValue.startsWith("http://") || linkValue.startsWith("https://") ? linkValue : `https://${linkValue}`;
+linkText.href = formattedLink;
+
+            
             linkText.innerHTML = `${linkTextValue}`;
             linkText.setAttribute("style","color: #68101d;text-decoration: underline;");
             lineSpan2.append(linkText);
